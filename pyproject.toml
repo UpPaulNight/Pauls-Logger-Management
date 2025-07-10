@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PaulsLoggerManagement"
+version = "1.0.0"
+dependencies = [
+    'pywin32 >= 310',
+    'types-pywin32',
+]
+authors = [
+    { name="Noah Baxley", email="noah.baxley@paulsmachine.com" }
+]
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+email = [
+    "PaulsEmailManagement @ git+https://github.com/UpPaulNight/Pauls-Email-Management.git@aeb008e047e875a75f34d83e147b391f7a8d7cf5"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["PaulsLoggerManagement"]
