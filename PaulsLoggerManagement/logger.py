@@ -3,7 +3,6 @@ import os
 from logging.handlers import RotatingFileHandler
 
 import colorlog
-from PaulsEmailManagement import send_email
 
 session_file_created = False
 is_alerted = False
@@ -87,6 +86,8 @@ def email_if_alerted(address: str, subject="", body="", ext="") -> None:
 
     if not is_alerted:
         return
+    
+    from PaulsEmailManagement import send_email
     
     abs_path = os.path.abspath("session.log")
     send_email(to=address,
