@@ -8,6 +8,8 @@ version = "1.0.1"
 dependencies = [
     'pywin32 >= 310',
     'types-pywin32',
+    'colorama >= 0.4.6',
+    'colorlog >= 6.9.0',
 ]
 authors = [
     { name="Noah Baxley", email="noah.baxley@paulsmachine.com" }
