@@ -20,7 +20,7 @@ class AlertingHandler(logging.Handler):
             is_alerted = True
 
 
-def setup_logger(name, log_file="events.log", level=logging.DEBUG):
+def setup_logger(name: str | None, log_file="events.log", level=logging.DEBUG) -> logging.Logger:
     global session_file_created
 
     if not session_file_created:
@@ -79,7 +79,7 @@ def setup_logger(name, log_file="events.log", level=logging.DEBUG):
     return logger
 
 
-def email_if_alerted(address: str, subject="", body="", ext=""):
+def email_if_alerted(address: str, subject="", body="", ext="") -> None:
     """
     If the alert handler was triggered during execution, send the session log
     file to an address
