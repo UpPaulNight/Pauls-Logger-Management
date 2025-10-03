@@ -6,7 +6,7 @@ import colorlog
 
 session_file_created = False
 is_alerted = False
-created_loggers: list[logging.Logger]
+created_loggers: list[logging.Logger] = []
 
 class AlertingHandler(logging.Handler):
     def __init__(self):
