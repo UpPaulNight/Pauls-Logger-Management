@@ -58,7 +58,7 @@ def setup_logger(name: str | None, log_file="events.log", level=logging.DEBUG) -
 
         # Persistent file handler and formatting
         file_handler = RotatingFileHandler(
-            log_file, maxBytes=5_000_000_000, backupCount=5
+            log_file, maxBytes=9_000_000, backupCount=5
         )
         file_handler.setFormatter(file_formatter)
 
