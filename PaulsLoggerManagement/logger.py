@@ -1,6 +1,6 @@
 import logging
 import os
-from logging.handlers import RotatingFileHandler
+from logging import FileHandler
 
 import colorlog
 
@@ -57,9 +57,7 @@ def setup_logger(name: str | None, log_file="events.log", level=logging.DEBUG) -
         stream.setFormatter(console_formatter)
 
         # Persistent file handler and formatting
-        file_handler = RotatingFileHandler(
-            log_file, maxBytes=9_000_000, backupCount=5
-        )
+        file_handler = FileHandler(log_file)
         file_handler.setFormatter(file_formatter)
 
         # Session file handler and formatting
