@@ -8,6 +8,10 @@ session_file_created = False
 is_alerted = False
 created_loggers: list[logging.Logger] = []
 
+_global_console_level: int = logging.DEBUG
+_global_file_level: int = logging.DEBUG
+_global_is_set = False
+
 class AlertingHandler(logging.Handler):
     def __init__(self):
         super().__init__()
@@ -25,9 +29,10 @@ def setup_logger(name: str | None,
                  console_log_level: int = logging.DEBUG,
                  file_log_level: int = logging.DEBUG,
                  *,
-                 level: int | None = None) -> logging.Logger:
+                 level: int | None = None,
+                 set_global = False) -> logging.Logger:
 
-    global session_file_created
+    global session_file_created, _global_console_level, _global_file_level, _global_is_set
 
     if not session_file_created:
         
@@ -42,6 +47,15 @@ def setup_logger(name: str | None,
     # is provided.
     console_log_level = level if level is not None else console_log_level
 
+    if _global_is_set:
+        console_log_level = _global_console_level
+        file_log_level = _global_file_level
+
+    if set_global:
+        _global_is_set = True
+        _global_console_level = console_log_level
+        _global_file_level = file_log_level
+    
     if not logger.handlers:
 
         # Files will not render colors correctly
