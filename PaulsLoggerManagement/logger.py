@@ -20,7 +20,13 @@ class AlertingHandler(logging.Handler):
             is_alerted = True
 
 
-def setup_logger(name: str | None, log_file="events.log", level=logging.DEBUG) -> logging.Logger:
+def setup_logger(name: str | None,
+                 log_file="events.log",
+                 console_log_level: int = logging.DEBUG,
+                 file_log_level: int = logging.DEBUG,
+                 *,
+                 level: int | None = None) -> logging.Logger:
+
     global session_file_created
 
     if not session_file_created:
@@ -30,18 +36,22 @@ def setup_logger(name: str | None, log_file="events.log", level=logging.DEBUG) -
         open('session.log', 'w').close()
 
     logger = logging.getLogger(name)
-    logger.setLevel(level)
+    logger.setLevel(logging.DEBUG)
+
+    # `level` arg is there for backwards compatibility, so default to it if it
+    # is provided.
+    console_log_level = level if level is not None else console_log_level
 
     if not logger.handlers:
 
         # Files will not render colors correctly
         file_formatter = logging.Formatter(
-            "[%(asctime)s] %(levelname)-8s - %(name)s - %(message)s"
+            "[%(asctime)s] %(name)s %(levelname)-5s %(filename)s:%(funcName)s:%(lineno)d - %(message)s"
         )
 
         # Most consoles CAN render colors correctly
         console_formatter = colorlog.ColoredFormatter(
-            fmt="%(log_color)s[%(asctime)s] %(levelname)-8s - %(message)s",
+            fmt="%(log_color)s[%(asctime)s] %(levelname)-5s - %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
             log_colors={
                 "DEBUG":    "cyan",
@@ -54,14 +64,17 @@ def setup_logger(name: str | None, log_file="events.log", level=logging.DEBUG) -
 
         # Grab the output stream and set the formatting
         stream = logging.StreamHandler()
+        stream.setLevel(console_log_level)
         stream.setFormatter(console_formatter)
 
         # Persistent file handler and formatting
         file_handler = FileHandler(log_file)
+        file_handler.setLevel(file_log_level)
         file_handler.setFormatter(file_formatter)
 
         # Session file handler and formatting
         session_handler = logging.FileHandler('session.log')
+        session_handler.setLevel(file_log_level)
         session_handler.setFormatter(file_formatter)
 
         # Trigger a flag if a message "warning" or higher gets logged
